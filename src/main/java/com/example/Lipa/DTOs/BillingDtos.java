@@ -186,7 +186,7 @@ public final class BillingDtos {
     ) {
         public static PaymentResponse from(Payment p) {
             return new PaymentResponse(
-                    p.getId(), p.getCustomerId(), p.getInvoiceId(), p.getStatus(),
+                    p.getPaymentId(), p.getCustomerId(), p.getInvoiceId(), p.getStatus(),
                     p.getAmount(), p.getRefundedAmount(), p.netAmount(),
                     p.getCurrency(), p.getStripePaymentIntentId(),
                     p.getFailureCode(), p.getFailureMessage(),

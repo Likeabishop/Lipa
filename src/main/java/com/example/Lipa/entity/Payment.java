@@ -12,7 +12,7 @@ import com.example.Lipa.enums.PaymentStatus;
  */
 public class Payment {
 
-    private final UUID id;
+    private final UUID paymentId;
     private final UUID customerId;
     private final UUID invoiceId;
     private PaymentStatus status;
@@ -86,16 +86,54 @@ public class Payment {
         return amount.subtract(refundedAmount);
     }
 
+    public static Payment rehydrate(
+            UUID paymentId,
+            UUID customerId,
+            UUID invoiceId,
+            PaymentStatus status,
+            BigDecimal amount,
+            BigDecimal refundedAmount,
+            String currency,
+            String stripePaymentIntentId,
+            String stripeChargeId,
+            String paymentMethodId,
+            String failureCode,
+            String failureMessage,
+            String idempotencyKey,
+            Instant processedAt,
+            Instant createdAt,
+            Instant updatedAt
+    ) {
+        return new Payment(
+                paymentId,
+                customerId,
+                invoiceId,
+                status,
+                amount,
+                refundedAmount,
+                currency,
+                stripePaymentIntentId,
+                stripeChargeId,
+                paymentMethodId,
+                failureCode,
+                failureMessage,
+                idempotencyKey,
+                processedAt,
+                createdAt,
+                updatedAt
+        );
+    }
+
     // -------------------------------------------------------------------------
     // Constructor
     // -------------------------------------------------------------------------
 
-    private Payment(UUID id, UUID customerId, UUID invoiceId, PaymentStatus status,
+    private Payment(UUID paymentId, UUID customerId, UUID invoiceId, PaymentStatus status,
                     BigDecimal amount, BigDecimal refundedAmount, String currency,
                     String stripePaymentIntentId, String stripeChargeId,
                     String paymentMethodId, String failureCode, String failureMessage,
                     String idempotencyKey, Instant processedAt, Instant createdAt, Instant updatedAt) {
-        this.id = id;
+        this.paymentId = paymentId;
         this.customerId = customerId;
         this.invoiceId = invoiceId;
         this.status = status;
@@ -114,7 +152,7 @@ public class Payment {
     }
 
     // Getters
-    public UUID getId() { return id; }
+    public UUID getPaymentId() { return paymentId; }
     public UUID getCustomerId() { return customerId; }
     public UUID getInvoiceId() { return invoiceId; }
     public PaymentStatus getStatus() { return status; }

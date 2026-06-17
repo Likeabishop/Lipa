@@ -73,7 +73,7 @@ public class StripeWebhookController {
                         payment.succeed(pi.getId());
                         paymentRepository.save(payment);
                         eventPublisher.publish(new BillingEvent.PaymentSucceeded(
-                                payment.getId(), payment.getCustomerId(), payment.getInvoiceId(),
+                                payment.getPaymentId(), payment.getCustomerId(), payment.getInvoiceId(),
                                 payment.getAmount(), payment.getCurrency()
                         ));
                     }
@@ -92,7 +92,7 @@ public class StripeWebhookController {
             payment.fail(failureCode, failureMsg);
             paymentRepository.save(payment);
             eventPublisher.publish(new BillingEvent.PaymentFailed(
-                    payment.getId(), payment.getCustomerId(), payment.getInvoiceId(),
+                    payment.getPaymentId(), payment.getCustomerId(), payment.getInvoiceId(),
                     failureCode, failureMsg
             ));
         });

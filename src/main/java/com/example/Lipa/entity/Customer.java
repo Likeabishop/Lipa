@@ -81,4 +81,30 @@ public class Customer {
     public boolean isTaxExempt() { return taxExempt; }
     public Instant getCreatedAt() { return createdAt; }
     public Instant getUpdatedAt() { return updatedAt; }
+
+    public static Customer reconstruct(
+            UUID customerId,
+            String externalUserId,
+            String email,
+            String name,
+            String stripeCustomerId,
+            String defaultPaymentMethodId,
+            String currency,
+            boolean taxExempt,
+            Instant createdAt,
+            Instant updatedAt
+    ) {
+        return new Customer(
+                customerId,
+                externalUserId,
+                email,
+                name,
+                stripeCustomerId,
+                defaultPaymentMethodId,
+                currency,
+                taxExempt,
+                createdAt,
+                updatedAt
+        );
+    }
 }
