@@ -40,7 +40,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(BillingException.class)
     public ResponseEntity<BillingDtos.ApiError> handleBilling(BillingException ex) {
         log.error("Billing error: {}", ex.getMessage());
-        return ResponseEntity.status(HttpStatus.UNPROCESSABLE_CONTENT)
+        return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY)
                 .body(BillingDtos.ApiError.of(422, "BILLING_ERROR", ex.getMessage()));
     }
 

@@ -51,7 +51,7 @@ public class PaymentService implements PaymentUseCase {
 
         return paymentRepository.findByIdempotencyKey(idempotencyKey)
                 .map(existing -> {
-                    log.warn("Duplicate payment request detected — returning existing payment id={}", existing.getId());
+                    log.warn("Duplicate payment request detected — returning existing payment id={}", existing.getPaymentId());
                     return existing;
                 })
                 .orElseGet(() -> executePayment(command, idempotencyKey));
@@ -91,17 +91,17 @@ public class PaymentService implements PaymentUseCase {
                 invoiceRepository.save(invoice);
 
                 eventPublisher.publish(new BillingEvent.PaymentSucceeded(
-                        payment.getId(), customer.getCustomerId(), invoice.getId(),
+                        payment.getPaymentId(), customer.getCustomerId(), invoice.getId(),
                         payment.getAmount(), payment.getCurrency()
                 ));
 
-                log.info("Payment succeeded id={} chargeId={}", payment.getId(), result.chargeId());
+                log.info("Payment succeeded id={} chargeId={}", payment.getPaymentId(), result.chargeId());
             } else {
                 payment.fail(result.failureCode(), result.failureMessage());
                 payment = paymentRepository.save(payment);
 
                 eventPublisher.publish(new BillingEvent.PaymentFailed(
-                        payment.getId(), customer.getCustomerId(), invoice.getId(),
+                        payment.getPaymentId(), customer.getCustomerId(), invoice.getId(),
                         result.failureCode(), result.failureMessage()
                 ));
 
@@ -131,7 +131,7 @@ public class PaymentService implements PaymentUseCase {
         );
 
         if (!result.succeeded()) {
-            throw new BillingException("Refund failed for payment: " + payment.getId());
+            throw new BillingException("Refund failed for payment: " + payment.getPaymentId());
         }
 
         payment.refund(command.refundAmount());

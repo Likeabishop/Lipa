@@ -121,7 +121,7 @@ public class StripePaymentGatewayAdapter implements PaymentGateway {
                     .setPaymentMethod(payment.getPaymentMethodId())
                     .setConfirm(true)
                     .setOffSession(true)   // SaaS recurring — no 3DS redirect
-                    .putMetadata("paymentId", payment.getId().toString())
+                    .putMetadata("paymentId", payment.getPaymentId().toString())
                     .putMetadata("invoiceId", payment.getInvoiceId().toString())
                     .build();
             
@@ -141,11 +141,11 @@ public class StripePaymentGatewayAdapter implements PaymentGateway {
         } catch (CardException e) {
             // Card-level declines — user-actionable
             log.warn("Card declined for payment={} code={} message={}",
-                    payment.getId(), e.getCode(), e.getMessage());
+                    payment.getPaymentId(), e.getCode(), e.getMessage());
             return new ChargeResult(null, null, false, e.getCode(), e.getMessage());
 
         } catch (StripeException e) {
-            log.error("Stripe error during charge for payment={}", payment.getId(), e);
+            log.error("Stripe error during charge for payment={}", payment.getPaymentId(), e);
             return new ChargeResult(null, null, false, "STRIPE_ERROR", e.getMessage());
         }
     }
