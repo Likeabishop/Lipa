@@ -47,7 +47,6 @@ services:
       POSTGRES_PASSWORD: ${SPRING_DATABASE_PASSWORD}
     volumes:
       - postgres_data:/var/lib/postgresql/data
-      - ./docker/postgres/V1__create_notifications_tables.sql:/docker-entrypoint-initdb.d/init.sql
     networks:
       - microservices-net
     healthcheck:
